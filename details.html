@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookVerse-Details</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.genre-section, .books-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.genre-card, .book-card {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+}
+
+.book-card img, .related-photos img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.view-details, .see-more {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #007BFF;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.view-details:hover, .see-more:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    margin-top: 20px;
+}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 id="book-title">Book Details</h1>
+    </div>
+    <div id="book-details" class="book-details">
+        <!-- Book details will be dynamically inserted here -->
+    </div>
+    <footer>
+        <p>&copy; 2024 BookVerse. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get("id");
+            if (bookId) fetchBookDetails(bookId);
+        });
+
+        function fetchBookDetails(bookId) {
+            fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}?key=YOUR_GOOGLE_API_KEY`)
+                .then(response => response.json())
+                .then(data => displayBookDetails(data.volumeInfo))
+                .catch(error => console.error("Error fetching book details:", error));
+        }
+
+        function displayBookDetails(book) {
+            const detailsContainer = document.getElementById("book-details");
+            detailsContainer.innerHTML = `
+                <img src="${book.imageLinks?.thumbnail || 'placeholder.jpg'}" alt="${book.title}">
+                <h2>${book.title}</h2>
+                <p><strong>Author:</strong> ${book.authors ? book.authors.join(', ') : 'Unknown'}</p>
+                <p><strong>Description:</strong> ${book.description || 'No description available.'}</p>
+                <div class="links">
+                    <a href="${book.infoLink}" target="_blank">eBook</a>
+                    <a href="https://www.amazon.com/s?k=${book.title}" target="_blank">Amazon</a>
+                    <a href="https://www.flipkart.com/search?q=${book.title}" target="_blank">Flipkart</a>
+                </div>
+                <div class="related-photos">
+                    <!-- Placeholder for related photos (can be manually added or loaded from API) -->
+                    <img src="related1.jpg" alt="Related Photo 1">
+                    <img src="related2.jpg" alt="Related Photo 2">
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

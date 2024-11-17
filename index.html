@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookVerse</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: arial, sans-serif;
+
+
+            padding: 20px;
+
+            background-color: #f0f0f0;
+
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            margin-bottom: 50px;
+
+        }
+
+        .heading{
+            font-size: 60px;
+            font-weight: 600;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: aliceblue;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        
+
+        .image {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+            align-items: flex-start;
+            
+
+        }
+
+        .image img {
+            width: 1350px;
+            height:300px;
+
+            top: 20px;
+            left: 20px;
+        }
+        .genre-section{
+            display: flex;
+            flex-wrap: wrap;
+            gap:20px;
+        }
+        .genre{
+            background-color: rgb(187, 167, 136);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+        
+        .title{
+            font-size: 25px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .books {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .books img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .see-more {
+            display: block;
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .see-more:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="heading">BookVerse</div>
+        <div class="image">
+            <img src="img.jpeg" alt="">
+        </div>
+    </div>
+    <h1>Find Your Genres</h1>
+    
+    <section class="genre-section">
+       
+        <div class="genre">
+            <div class="title">Mystery</div>
+            <div class="books">
+                <img src="mystry1.webp" alt="open image">
+                <img src="mystery2.webp" alt="open image">
+                <img src="mystery3.webp" alt="open image"> 
+    
+            </div>
+            <a href="mystery.html" class="see-more">See More</a>
+        </div>
+        <div class="genre">
+            <div class="title">Romance</div>
+            <div class="books">
+                <img src="romance1.webp" alt="open image">
+                <img src="romance2.webp" alt="open image">
+                <img src="romance3.webp" alt="open image"> 
+    
+            </div>
+            <a href="romance.html" class="see-more">See More</a>
+        </div>
+        <div class="genre">
+            <div class="title">Fantasy</div>
+            <div class="books">
+                <img src="fantasy1.webp" alt="open image">
+                <img src="fantasy2.webp" alt="open image">
+                <img src="fantasy3.webp" alt="open image"> 
+    
+            </div>
+            <a href="fantasy.html" class="see-more">See More</a>
+        </div>
+        
+        
+        <div class="genre">
+            <div class="title">Non-fiction</div>
+            <div class="books">
+                <img src="non-fic1.webp" alt="open image">
+                <img src="non-fic2.webp" alt="open image">
+                <img src="non-fic3.webp" alt="open image"> 
+    
+            </div>
+            <a href="non-fiction.html" class="see-more">See More</a>
+        </div>
+        <div class="genre">
+            <div class="title">Biography</div>
+            <div class="books">
+                <img src="biog2.webp" alt="open image">
+                <img src="biog1.webp" alt="open image">
+                <img src="biog3.webp" alt="open image"> 
+    
+            </div>
+            <a href="biography.html" class="see-more">See More</a>
+        </div>
+        <div class="genre">
+            <div class="title">Motivation</div>
+            <div class="books">
+                <img src="mot1.webp" alt="open image">
+                <img src="mot3.webp" alt="open image">
+                <img src="mot2.webp" alt="open image"> 
+    
+            </div>
+            <a href="motivation.html" class="see-more">See More</a>
+            
+        </div>
+        <div class="genre">
+            <div class="title">Sci-fi</div>
+            <div class="books">
+                <img src="sci-fi1.webp" alt="open image">
+                <img src="sci-fi2.webp" alt="open image">
+                <img src="sci-fi3.webp" alt="open image"> 
+    
+            </div>
+            <a href="sci-fi.html" class="see-more">See More</a>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2024 BookVerse. All rights reserved.</p>
+    </footer>
+    
+</body>
+
+</html>

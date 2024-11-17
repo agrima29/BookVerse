@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystery Books - BookVerse</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .genre-section, .books-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .book-card {
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 200px;
+    }
+
+    .book-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .view-details {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        color: white;
+        background-color: #007BFF;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .view-details:hover {
+        background-color: #0056b3;
+    }
+
+    footer {
+        text-align: center;
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        margin-top: 20px;
+    }
+</style>
+
+<body>
+    <header class="header">
+        <h1>Mystery Books</h1>
+    </header>
+
+    <div id="books" class="books-grid"></div>
+
+    <footer>
+        <p>&copy; 2024 BookVerse. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchBooksByGenre("Mystery");
+        });
+
+        function fetchBooksByGenre(genre) {
+            const apiKey = "AIzaSyB66p9kgXp1OIrCXVg4CDOfef-R1MYI7UI";
+            const url = `https://www.googleapis.com/books/v1/volumes?q=subject:${genre}&key=${apiKey}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => displayBooks(data.items))
+                .catch(error => console.error("Error fetching books:", error));
+        }
+
+        function displayBooks(books) {
+            const container = document.getElementById("books");
+            container.innerHTML = "";  // Clear previous results if any
+
+            books.forEach(book => {
+                const bookCard = document.createElement("div");
+                bookCard.classList.add("book-card");
+
+                bookCard.innerHTML = `
+                    <img src="${book.volumeInfo.imageLinks?.thumbnail || 'placeholder.jpg'}" alt="${book.volumeInfo.title}">
+                    <h3>${book.volumeInfo.title}</h3>
+                    <p>by ${book.volumeInfo.authors ? book.volumeInfo.authors.join(', ') : 'Unknown Author'}</p>
+                    <a href="details.html?id=${book.id}" class="view-details">View Details</a>
+                `;
+                container.appendChild(bookCard);
+            });
+        }
+    </script>
+</body>
+
+</html>
