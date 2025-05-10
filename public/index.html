@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookverse</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Bookverse</h1>
+        
+        <nav>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Signup</a>
+        </nav>
+    </header>
+
+    <!-- Bookverse Banner Image -->
+    <section id="banner">
+        <img src="book.jpg" alt="Bookverse Banner">
+    </section>
+
+    <section id="genres">
+        <h2>Genres</h2>
+        <div id="genre-list">
+            <button onclick="loadBooks('Thriller')">Thriller</button>
+            <button onclick="loadBooks('Romance')">Romantic</button>
+            <button onclick="loadBooks('Horror')">Horror</button>
+        </div>
+    </section>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Header */
+header {
+    background: #4a90e2;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #d1eaff;
+}
+
+/* Full-Width Banner */
+#banner {
+    width: 100vw; /* Full screen width */
+    height: 50vh; /* Adjust height as needed */
+    overflow: hidden; /* Prevents extra scroll */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+#banner img {
+    width: 100%;  /* Makes the image cover full width */
+    height: 100%; /* Stretches to cover full height */
+    object-fit: cover; /* Ensures the image scales properly */
+}
+
+#banner h1 {
+    position: absolute;
+    color: white;
+    font-size: 64px; /* Increased size */
+    font-weight: bold;
+    text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.7);
+}
+
+
+/* Genres Section */
+#genres {
+    text-align: center;
+    margin: 40px 0;
+}
+
+#genres h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+#genre-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+#genre-list button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+#genre-list button:hover {
+    background-color: #e63946;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #genre-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #genre-list button {
+        width: 80%;
+    }
+}
