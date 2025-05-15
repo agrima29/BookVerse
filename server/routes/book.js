@@ -14,14 +14,15 @@ router.get("/private", protect, (req, res) => {
 // POST: Add new book
 router.post("/", protect, async (req, res) => {
     try {
-        const { title, author, description, amazon_link } = req.body;
+        const { title, author, description, amazon_link, genre } = req.body;
 
-const newBook = new Book({
-    title,
-    author,
-    description,
-    amazon_link,
-    createdBy: req.user.id
+        const newBook = new Book({
+            title,
+            author,
+            description,
+            amazon_link,
+            genre,
+            createdBy: req.user.id
         });
 
         await newBook.save();
@@ -60,7 +61,22 @@ router.get("/mybooks", protect, async (req, res) => {
     }
 });
 
+// GET: Books by genre (no auth required)
+router.get("/genre/:genre", async (req, res) => {
+    try {
+        const genre = req.params.genre.toLowerCase();
+        const books = await Book.find({ genre: genre });
 
+        if (books.length === 0) {
+            return res.status(404).json({ success: false, message: "No books found in this genre" });
+        }
+
+        res.status(200).json({ success: true, books });
+    } catch (error) {
+        console.error("Error fetching books by genre:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
 
 // DELETE: A book by ID
 router.delete("/:id", protect, async (req, res) => {
@@ -83,7 +99,6 @@ router.delete("/:id", protect, async (req, res) => {
     }
 });
 
-
 // GET: Get a single book by ID (with reviews)
 router.get("/:id", protect, async (req, res) => {
     try {
@@ -101,8 +116,5 @@ router.get("/:id", protect, async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 });
-
-
-
 
 module.exports = router;

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Books by Genre</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    :root {
+      --bg-light: #f9f8fc;
+      --text-light: #2d2d2d;
+      --card-bg: #ffffff;
+      --primary: #9c89b8;
+      --accent: #6a994e;
+      --border-color: #e0d7f3;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      padding: 25px 15px;
+      text-align: center;
+      background-color: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      margin: 0 12px;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    #genre-title {
+      text-align: center;
+      font-size: 28px;
+      margin: 30px 0 10px;
+      color: var(--primary);
+    }
+
+    #book-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .book-item {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 15px;
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .book-item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    .book-item img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .book-item h3 {
+      font-size: 18px;
+      margin: 10px 0 6px;
+      color: var(--primary);
+    }
+
+    .book-item p {
+      margin: 4px 0;
+      font-size: 14px;
+    }
+
+    .book-item a {
+      margin-top: 8px;
+      display: inline-block;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .book-item button {
+      margin-top: 10px;
+      padding: 8px 14px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .book-item button:hover {
+      background-color: var(--accent);
+    }
+
+    #loader {
+      text-align: center;
+      padding: 60px;
+      font-size: 20px;
+      color: #888;
+    }
+
+    @media (max-width: 500px) {
+      .book-item {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Books in Genre</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Signup</a>
+    </nav>
+  </header>
+
+  <section id="books">
+    <h2 id="genre-title">Books</h2>
+    <div id="loader">🔄 Loading books...</div>
+    <div id="book-list" style="display:none;"></div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    const params = new URLSearchParams(window.location.search);
+    const genre = params.get('genre');
+
+    fetch(`http://localhost:5000/api/books/genre/${genre}`)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("loader").style.display = "none";
+        const bookList = document.getElementById('book-list');
+        bookList.style.display = "flex";
+
+        if (data.success && data.books.length > 0) {
+          data.books.forEach(book => {
+            const bookItem = document.createElement('div');
+            bookItem.classList.add('book-item');
+            bookItem.setAttribute('data-aos', 'fade-up');
+
+            const bookData = encodeURIComponent(JSON.stringify(book));
+
+            bookItem.innerHTML = `
+              <img src="${book.image || 'default-cover.jpg'}" alt="${book.title}">
+              <h3>${book.title}</h3>
+              <p><strong>Author:</strong> ${book.author}</p>
+              <p><strong>Rating:</strong> ${book.rating || 'N/A'}</p>
+              <a href="${book.amazon_link}" target="_blank">Buy on Amazon</a>
+              <button onclick="window.location.href='bookDetails.html?book=${bookData}'">View Details</button>
+            `;
+            bookList.appendChild(bookItem);
+          });
+        } else {
+          bookList.innerHTML = `<p>No books found for the "${genre}" genre.</p>`;
+        }
+      })
+      .catch(err => {
+        console.error("Error fetching books by genre:", err);
+        document.getElementById("loader").innerHTML = `<p>Failed to load books. Please try again later.</p>`;
+      });
+  </script>
+</body>
+</html>

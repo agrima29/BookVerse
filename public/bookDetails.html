@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Details</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .book-container {
+      max-width: 900px;
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .book-details {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .book-details img {
+      width: 180px;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .book-details h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+
+    .book-details p {
+      font-size: 1rem;
+      margin: 0.3rem 0;
+    }
+
+    .book-details a {
+      margin-top: 1rem;
+      display: inline-block;
+      background-color: #1abc9c;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    .book-details a:hover {
+      background-color: #16a085;
+    }
+
+    .review-section {
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+    }
+
+    .review-section h3 {
+      margin-bottom: 0.8rem;
+      color: #34495e;
+    }
+
+    textarea#reviewInput {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      resize: vertical;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .review-list h4 {
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+
+    .review-list p {
+      background-color: #ecf0f1;
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin: 0.4rem 0;
+    }
+
+    @media (max-width: 600px) {
+      .book-details img {
+        width: 140px;
+      }
+
+      .book-details h2 {
+        font-size: 1.4rem;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="book-container">
+    <div class="book-details" id="book-details">
+      <!-- Book details will be injected here -->
+    </div>
+
+    <div class="review-section">
+      <h3>Leave a Review</h3>
+      <textarea id="reviewInput" placeholder="Write your review..."></textarea>
+      <button onclick="submitReview()">Submit</button>
+
+      <div class="review-list" id="reviewList">
+        <h4>Reviews</h4>
+        <!-- Reviews will appear here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    let bookData;
+
+    try {
+      bookData = JSON.parse(decodeURIComponent(params.get("book")));
+      if (!bookData) throw new Error("Missing data");
+    } catch (err) {
+      document.body.innerHTML = "<p style='text-align:center; margin-top:50px;'>Invalid book data. Please go back and try again.</p>";
+      throw err;
+    }
+
+    const bookId = bookData.id;
+    const detailsContainer = document.getElementById("book-details");
+
+    detailsContainer.innerHTML = `
+      <img src="${bookData.image || 'default-cover.jpg'}" alt="${bookData.title}" />
+      <h2>${bookData.title}</h2>
+      <p><strong>Author:</strong> ${bookData.author}</p>
+      <p><strong>Rating:</strong> ${bookData.rating}</p>
+      <p><strong>Description:</strong> ${bookData.description}</p>
+      <a href="${bookData.amazon_link}" target="_blank">Buy on Amazon</a>
+    `;
+
+    const reviewInput = document.getElementById("reviewInput");
+    const reviewList = document.getElementById("reviewList");
+
+    function submitReview() {
+      const review = reviewInput.value.trim();
+      if (!review) return;
+
+      fetch("http://localhost:5000/api/review", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          bookId: bookId,
+          content: review,
+        }),
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          reviewInput.value = "";
+          fetchReviews();
+        } else {
+          alert("Failed to submit review.");
+        }
+      })
+      .catch(err => {
+        console.error("Review submission error:", err);
+        alert("Error submitting review.");
+      });
+    }
+
+    function fetchReviews() {
+      fetch(`http://localhost:5000/api/review/book/${bookId}`)
+        .then(res => res.json())
+        .then(data => {
+          reviewList.innerHTML = "<h4>Reviews</h4>";
+
+          if (data.success) {
+            if (data.reviews.length === 0) {
+              reviewList.innerHTML += "<p>No reviews yet. Be the first to review!</p>";
+            } else {
+              data.reviews.forEach(review => {
+                const p = document.createElement("p");
+                p.textContent = review.content;
+                reviewList.appendChild(p);
+              });
+            }
+          } else {
+            reviewList.innerHTML += "<p>Error loading reviews.</p>";
+          }
+        })
+        .catch(err => {
+          console.error("Failed to load reviews:", err);
+          reviewList.innerHTML += "<p>Error loading reviews.</p>";
+        });
+    }
+
+    fetchReviews();
+  </script>
+</body>
+</html>
